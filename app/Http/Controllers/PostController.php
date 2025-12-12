@@ -32,11 +32,14 @@ class PostController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'short_description' => 'nullable|string',
             'content' => 'required|string',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'tags' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'is_published' => 'nullable|boolean',
+        ], [
+            'category_id.required' => 'Önce kategori seçmelisin.',
+            'category_id.exists' => 'Seçilen kategori geçerli değil.',
         ]);
 
         // Görsel yükleme
@@ -74,7 +77,8 @@ class PostController extends Controller
             $post->categories()->sync([$categoryId]);
         }
 
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')
+            ->with('success', 'Blog yazısı başarıyla oluşturuldu.');
     }
 
     public function edit(Post $post)
@@ -92,7 +96,7 @@ class PostController extends Controller
                 'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
                 'short_description' => 'nullable|string',
                 'content' => 'required|string',
-                'category_id' => 'nullable|exists:categories,id',
+                'category_id' => 'required|exists:categories,id',
                 'tags' => 'nullable|string',
                 'meta_title' => 'nullable|string|max:255',
                 'meta_description' => 'nullable|string',
@@ -103,6 +107,8 @@ class PostController extends Controller
                 'cover_image.mimes' => 'Kapak görseli jpeg, png, jpg, gif veya webp formatında olmalıdır.',
                 'cover_image.max' => 'Kapak görseli maksimum 5MB olabilir.',
                 'content.required' => 'İçerik alanı zorunludur.',
+                'category_id.required' => 'Önce kategori seçmelisin.',
+                'category_id.exists' => 'Seçilen kategori geçerli değil.',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Blog güncelleme validation hatası', [
@@ -193,7 +199,8 @@ class PostController extends Controller
                 'has_new_image' => $request->hasFile('cover_image')
             ]);
 
-            return redirect()->route('posts.index');
+            return redirect()->route('posts.index')
+                ->with('success', 'Blog yazısı başarıyla güncellendi.');
         } catch (\Exception $e) {
             Log::error('Blog güncelleme hatası', [
                 'post_id' => $post->id,
@@ -216,6 +223,7 @@ class PostController extends Controller
 
         $post->delete();
 
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')
+            ->with('success', 'Blog yazısı başarıyla silindi.');
     }
 }

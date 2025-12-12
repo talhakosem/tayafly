@@ -90,10 +90,11 @@
             <div class="card-body p-6 d-flex flex-column gap-4">
                 <!-- Kategori -->
                 <div>
-                    <label for="category_id" class="form-label">Kategori</label>
+                    <label for="category_id" class="form-label">Kategori *</label>
                     <select class="form-select @error('category_id') is-invalid @enderror" 
                             id="category_id" 
-                            name="category_id">
+                            name="category_id"
+                            required>
                         <option value="">Kategori Seçin</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
@@ -214,6 +215,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const contentTextarea = document.querySelector('#content');
             if (contentTextarea) {
                 contentTextarea.value = quill.root.innerHTML;
+            }
+            
+            // Form validation
+            const categoryId = document.querySelector('#category_id').value;
+            if (!categoryId) {
+                alert('Önce kategori seçmelisin!');
+                e.preventDefault();
+                return false;
             }
         });
     }

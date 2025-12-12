@@ -26,7 +26,7 @@
 
 @if($errors->any())
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <h5 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Doğrulama Hataları</h5>
+        <h5 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Doğrulama Hataları {{ Auth::user()->name }}</h5>
         <ul class="mb-0">
             @foreach($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -120,13 +120,14 @@
             <div class="card-body p-6 d-flex flex-column gap-4">
                 <!-- Kategori -->
                 <div>
-                    <label for="category_id" class="form-label">Kategori</label>
+                    <label for="category_id" class="form-label">Kategori *</label>
                     @php
                         $selectedCategoryId = old('category_id', $post->categories->first()?->id);
                     @endphp
                     <select class="form-select @error('category_id') is-invalid @enderror" 
                             id="category_id" 
-                            name="category_id">
+                            name="category_id"
+                            required>
                         <option value="">Kategori Seçin</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ $selectedCategoryId == $category->id ? 'selected' : '' }}>
@@ -266,6 +267,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const title = document.querySelector('#title').value.trim();
         if (!title) {
             alert('Başlık alanı zorunludur!');
+            e.preventDefault();
+            return false;
+        }
+        
+        const categoryId = document.querySelector('#category_id').value;
+        if (!categoryId) {
+            alert('Önce kategori seçmelisin!');
             e.preventDefault();
             return false;
         }
