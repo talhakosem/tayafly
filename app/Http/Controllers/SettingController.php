@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\StorageHelper;
 
 class SettingController extends Controller
 {
@@ -47,17 +48,17 @@ class SettingController extends Controller
         // Logo yükleme
         if ($request->hasFile('logo')) {
             if ($setting->logo) {
-                Storage::disk('public')->delete($setting->logo);
+                StorageHelper::deleteFromBoth($setting->logo);
             }
-            $data['logo'] = $request->file('logo')->store('settings', 'public');
+            $data['logo'] = StorageHelper::storeAndCopy($request->file('logo'), 'settings');
         }
 
         // Favicon yükleme
         if ($request->hasFile('favicon')) {
             if ($setting->favicon) {
-                Storage::disk('public')->delete($setting->favicon);
+                StorageHelper::deleteFromBoth($setting->favicon);
             }
-            $data['favicon'] = $request->file('favicon')->store('settings', 'public');
+            $data['favicon'] = StorageHelper::storeAndCopy($request->file('favicon'), 'settings');
         }
 
         $setting->update($data);

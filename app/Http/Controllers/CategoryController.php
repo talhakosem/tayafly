@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Helpers\StorageHelper;
 
 class CategoryController extends Controller
 {
@@ -61,7 +62,7 @@ class CategoryController extends Controller
 
         // Görsel yükleme
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('categories', 'public');
+            $data['image'] = StorageHelper::storeAndCopy($request->file('image'), 'categories');
         }
 
         // Alt kategori özelliği kaldırıldı, parent_id her zaman 0
@@ -120,9 +121,9 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             // Eski görseli sil
             if ($category->image) {
-                Storage::disk('public')->delete($category->image);
+                StorageHelper::deleteFromBoth($category->image);
             }
-            $data['image'] = $request->file('image')->store('categories', 'public');
+            $data['image'] = StorageHelper::storeAndCopy($request->file('image'), 'categories');
         }
 
         // Alt kategori özelliği kaldırıldı, parent_id her zaman 0
@@ -145,7 +146,7 @@ class CategoryController extends Controller
     {
         // Görseli sil
         if ($category->image) {
-            Storage::disk('public')->delete($category->image);
+            StorageHelper::deleteFromBoth($category->image);
         }
 
         $category->delete();

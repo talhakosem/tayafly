@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Helpers\StorageHelper;
 
 class PostController extends Controller
 {
@@ -45,7 +46,7 @@ class PostController extends Controller
         // Görsel yükleme
         if ($request->hasFile('cover_image')) {
             try {
-                $uploadedPath = $request->file('cover_image')->store('posts', 'public');
+                $uploadedPath = StorageHelper::storeAndCopy($request->file('cover_image'), 'posts');
                 if ($uploadedPath) {
                     $data['cover_image'] = $uploadedPath;
                 } else {
@@ -130,20 +131,20 @@ class PostController extends Controller
             try {
                 $file = $request->file('cover_image');
                 
-                // Dosya geçerli mi kontrol et
+                    // Dosya geçerli mi kontrol et
                 if ($file->isValid()) {
                     // Eski görseli sil
-                    if ($post->cover_image && Storage::disk('public')->exists($post->cover_image)) {
-                        Storage::disk('public')->delete($post->cover_image);
+                    if ($post->cover_image) {
+                        StorageHelper::deleteFromBoth($post->cover_image);
                         Log::info('Eski görsel silindi', ['path' => $post->cover_image]);
                     }
                     
-                    // Yeni görseli yükle
-                    $uploadedPath = $file->store('posts', 'public');
+                    // Yeni görseli yükle ve kopyala
+                    $uploadedPath = StorageHelper::storeAndCopy($file, 'posts');
                     
                     if ($uploadedPath) {
                         $data['cover_image'] = $uploadedPath;
-                        Log::info('Görsel başarıyla yüklendi', ['path' => $uploadedPath]);
+                        Log::info('Görsel başarıyla yüklendi ve kopyalandı', ['path' => $uploadedPath]);
                     } else {
                         Log::error('Görsel yüklenemedi - store false döndü');
                     }
@@ -218,7 +219,7 @@ class PostController extends Controller
     {
         // Görseli sil
         if ($post->cover_image) {
-            Storage::disk('public')->delete($post->cover_image);
+            StorageHelper::deleteFromBoth($post->cover_image);
         }
 
         $post->delete();
