@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /storage/*.zip
+Disallow: /storage/*.sql
+
+Sitemap: https://tayafly.com/sitemap.xml

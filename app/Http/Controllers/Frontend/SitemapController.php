@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Destination;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
@@ -18,45 +19,45 @@ class SitemapController extends Controller
     {
         $baseUrl = config('app.url');
         
-        // Sitemap XML başlangıcı
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        // Sitemap XML içeriğini oluştur
+        $content = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
         
         // Ana sayfa
-        $xml .= $this->urlElement($baseUrl . '/', '1.0', 'daily');
+        $content .= $this->urlElement($baseUrl . '/', '1.0', 'daily');
         
         // Blog listesi
-        $xml .= $this->urlElement($baseUrl . '/blog', '0.8', 'daily');
+        $content .= $this->urlElement($baseUrl . '/blog', '0.8', 'daily');
         
-        // Hakkımızda sayfası
-        $xml .= $this->urlElement($baseUrl . '/hakkimizda', '0.6', 'monthly');
-        
-        // Yayınlanmış blog yazıları (kategori slug ile birlikte)
+        // Kategoriler
+        $categories = Category::orderBy('updated_at', 'desc')->get();
+        foreach ($categories as $category) {
+            $lastmod = $category->updated_at ? $category->updated_at->format('Y-m-d') : date('Y-m-d');
+            $content .= $this->urlElement($baseUrl . '/' . $category->slug, '0.7', 'weekly', $lastmod);
+        }
+
+        // Destinasyonlar
+        $destinations = Destination::where('is_active', true)->orderBy('updated_at', 'desc')->get();
+        foreach ($destinations as $destination) {
+            $lastmod = $destination->updated_at ? $destination->updated_at->format('Y-m-d') : date('Y-m-d');
+            $content .= $this->urlElement(url('/destination/' . $destination->slug), '0.9', 'weekly', $lastmod);
+        }
+
+        // Yayınlanmış blog yazıları
         $posts = Post::where('is_published', true)
-            ->with('categories:categories.id,categories.slug')
+            ->with(['categories', 'destinations'])
             ->orderBy('updated_at', 'desc')
             ->get();
         
         foreach ($posts as $post) {
-            $categorySlug = $post->categories->first()->slug ?? '';
-            if ($categorySlug) {
-                $lastmod = $post->updated_at ? $post->updated_at->format('Y-m-d') : date('Y-m-d');
-                $xml .= $this->urlElement($baseUrl . '/' . $categorySlug . '/' . $post->slug, '0.7', 'weekly', $lastmod);
-            }
+            $lastmod = $post->updated_at ? $post->updated_at->format('Y-m-d') : date('Y-m-d');
+            $content .= $this->urlElement($post->url, '0.8', 'weekly', $lastmod);
         }
         
-        // Kategoriler
-        $categories = Category::orderBy('updated_at', 'desc')->get();
+        $content .= '</urlset>';
         
-        foreach ($categories as $category) {
-            $lastmod = $category->updated_at ? $category->updated_at->format('Y-m-d') : date('Y-m-d');
-            $xml .= $this->urlElement($baseUrl . '/' . $category->slug, '0.7', 'weekly', $lastmod);
-        }
-        
-        $xml .= '</urlset>';
-        
-        return response($xml, 200)
-            ->header('Content-Type', 'application/xml; charset=utf-8');
+        return response($content, 200)
+            ->header('Content-Type', 'text/xml');
     }
     
     /**

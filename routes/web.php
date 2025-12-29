@@ -10,9 +10,6 @@ Route::get('/', [\App\Http\Controllers\Frontend\HomeController::class, 'index'])
 // Frontend Blog Routes
 Route::get('blog', [\App\Http\Controllers\Frontend\BlogController::class, 'index'])->name('frontend.blog.index');
 
-// Frontend Static Pages
-Route::get('hakkimizda', [\App\Http\Controllers\Frontend\HomeController::class, 'about'])->name('frontend.about');
-
 // Frontend Destination Routes
 Route::get('destination/{slug}', [\App\Http\Controllers\Frontend\DestinationController::class, 'show'])->name('destination.show');
 Route::get('{destination_slug}/{blog_slug}', [\App\Http\Controllers\Frontend\DestinationController::class, 'showPost'])

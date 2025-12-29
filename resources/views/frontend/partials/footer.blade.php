@@ -61,83 +61,25 @@
 </div>
 @endif
 
-<footer class="pt-lg-8 pt-6 pb-4 bg-light border-top">
+<footer class="bg-light border-top py-4">
     <div class="container">
-        <div class="row gy-4 pb-3">
-            <!-- Site Info & Social -->
-            <div class="col-lg-4 col-md-6">
-                <div class="mb-4">
-                    @if($settings->logo)
-                        <img src="{{ asset('storage/' . $settings->logo) }}" alt="{{ $settings->site_title }}" class="mb-3" style="max-height: 40px;">
-                    @else
-                        <h4 class="mb-3">{{ $settings->site_title ?? config('app.name') }}</h4>
-                    @endif
-                    <p class="text-muted small mb-4">
-                        {{ $settings->site_description }}
-                    </p>
-                    <div class="d-flex gap-2">
-                        @if($settings->facebook_url)
-                            <a href="{{ $settings->facebook_url }}" target="_blank" class="footer-social-link"><i class="bi bi-facebook"></i></a>
-                        @endif
-                        @if($settings->instagram_url)
-                            <a href="{{ $settings->instagram_url }}" target="_blank" class="footer-social-link"><i class="bi bi-instagram"></i></a>
-                        @endif
-                        @if($settings->twitter_url)
-                            <a href="{{ $settings->twitter_url }}" target="_blank" class="footer-social-link"><i class="bi bi-twitter-x"></i></a>
-                        @endif
-                        @if($settings->youtube_url)
-                            <a href="{{ $settings->youtube_url }}" target="_blank" class="footer-social-link"><i class="bi bi-youtube"></i></a>
-                        @endif
+        <div class="row align-items-center">
+            <!-- Adres -->
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                @if($settings->address)
+                    <div class="d-inline-flex align-items-start gap-2 text-start">
+                        <i class="bi bi-geo-alt text-primary flex-shrink-0" style="font-size: 1rem; position: relative; top: 0px;"></i>
+                        <div class="text-muted small" style="line-height: 1.6;">{!! $settings->address !!}</div>
                     </div>
-                </div>
+                @endif
             </div>
 
-            <!-- Contact Info -->
-            <div class="col-lg-4 col-md-6">
-                <h6 class="mb-3 fw-bold">İletişim Bilgileri</h6>
-                <ul class="list-unstyled mb-0 small">
-                    @if($settings->phone)
-                        <li class="mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-telephone text-primary"></i>
-                            <a href="tel:{{ $settings->phone }}" class="text-decoration-none text-muted">{{ $settings->phone }}</a>
-                        </li>
-                    @endif
-                    @if($settings->email)
-                        <li class="mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-envelope text-primary"></i>
-                            <a href="mailto:{{ $settings->email }}" class="text-decoration-none text-muted">{{ $settings->email }}</a>
-                        </li>
-                    @endif
-                    @if($settings->whatsapp)
-                        <li class="mb-0 d-flex align-items-center gap-2">
-                            <i class="bi bi-whatsapp text-success"></i>
-                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->whatsapp) }}" target="_blank" class="text-decoration-none text-muted">WhatsApp</a>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-
-            <!-- Address Info -->
-            <div class="col-lg-4 col-md-12 ms-lg-auto">
-                <h6 class="mb-3 fw-bold">Adres</h6>
-                <ul class="list-unstyled mb-0 small">
-                    @if($settings->address)
-                        <li class="mb-3 d-flex align-items-start gap-2">
-                            <i class="bi bi-geo-alt text-primary"></i>
-                            <div class="text-muted">{!! $settings->address !!}</div>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-
-        <div class="row border-top pt-3">
-            <div class="col-12">
-                <div class="text-center">
-                    <p class="mb-0 text-muted small">
-                        Copyrights ©{{ date('Y') }} TayaFly. <br>Designed & Developed by <a href="https://tayadm.com" target="_blank" class="text-decoration-none text-muted">Taya Digital Media</a>
-                    </p>
-                </div>
+            <!-- Copyright -->
+            <div class="col-md-6 text-center text-md-end">
+                <p class="mb-0 text-muted small">
+                    Copyrights ©{{ date('Y') }} TayaFly. 
+                    Designed & Developed by <a href="https://tayadm.com" target="_blank" class="text-decoration-none text-muted">Taya Digital Media</a>
+                </p>
             </div>
         </div>
     </div>
