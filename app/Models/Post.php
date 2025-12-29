@@ -48,4 +48,35 @@ class Post extends Model
         return $this->belongsToMany(Destination::class, 'post_destination')
             ->withTimestamps();
     }
+
+    /**
+     * Get the URL for this post.
+     * If post has a destination, use destination URL, otherwise use category URL.
+     */
+    public function getUrl(): string
+    {
+        // Önce destination kontrolü - destination varsa öncelikli
+        $destination = $this->destinations->first();
+        if ($destination) {
+            // /private-jet-charter-london/blog-slug şeklinde
+            return url('/' . $destination->slug . '/' . $this->slug);
+        }
+
+        // Destination yoksa kategori URL'i kullan
+        $category = $this->categories->first();
+        if ($category) {
+            return url('/' . $category->slug . '/' . $this->slug);
+        }
+
+        // Hiçbiri yoksa sadece blog slug'ı
+        return url('/blog/' . $this->slug);
+    }
+
+    /**
+     * Get URL attribute for easy access in views.
+     */
+    public function getUrlAttribute(): string
+    {
+        return $this->getUrl();
+    }
 }

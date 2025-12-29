@@ -156,7 +156,7 @@
                 <!--Blog-->
                 <div class="col-lg-4 col-md-6">
                     <article>
-                        <a href="{{ url('/' . ($relatedPost->categories->first()->slug ?? '') . '/' . $relatedPost->slug) }}" class="position-relative d-flex">
+                        <a href="{{ $relatedPost->url }}" class="position-relative d-flex">
                             @if($relatedPost->cover_image)
                                 <img src="{{ asset('storage/' . $relatedPost->cover_image) }}" 
                                      alt="{{ $relatedPost->title }}" 
@@ -174,7 +174,7 @@
                         </a>
                         <div class="mt-4">
                             <h3 class="fs-5">
-                                <a href="{{ url('/' . ($relatedPost->categories->first()->slug ?? '') . '/' . $relatedPost->slug) }}" class="text-inherit">
+                                <a href="{{ $relatedPost->url }}" class="text-inherit">
                                     {{ html_entity_decode($relatedPost->title, ENT_QUOTES | ENT_HTML5, 'UTF-8') }}
                                 </a>
                             </h3>

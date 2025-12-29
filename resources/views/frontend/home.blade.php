@@ -64,7 +64,7 @@
                                                     <div class="row g-3">
                                                         @foreach($categoryPosts as $post)
                                                             <div class="col-12">
-                                                                <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="text-decoration-none d-flex align-items-start">
+                                                                <a href="{{ $post->url }}" class="text-decoration-none d-flex align-items-start">
                                                                     @if($post->cover_image)
                                                                         <img src="{{ asset('storage/' . $post->cover_image) }}" 
                                                                              alt="{{ $post->title }}"
@@ -142,7 +142,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card border-0 shadow-sm h-100">
                     @if($post->cover_image)
-                        <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}">
+                        <a href="{{ $post->url }}">
                             <img src="{{ asset('storage/' . $post->cover_image) }}" 
                                  alt="{{ $post->title }}"
                                  class="card-img-top"
@@ -151,7 +151,7 @@
                     @endif
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="text-decoration-none text-dark">
+                            <a href="{{ $post->url }}" class="text-decoration-none text-dark">
                                 {{ $post->title }}
                             </a>
                         </h5>
@@ -160,7 +160,7 @@
                                 {{ \Illuminate\Support\Str::limit(strip_tags($post->meta_description), 150) }}
                             </p>
                         @endif
-                        <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="btn btn-outline-primary btn-sm">Read More</a>
+                        <a href="{{ $post->url }}" class="btn btn-outline-primary btn-sm">Read More</a>
                     </div>
                 </div>
             </div>
@@ -200,7 +200,7 @@
             @foreach($randomPosts as $post)
                 <div class="col-lg-4 col-md-6">
                     <article class="">
-                        <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="position-relative d-flex">
+                        <a href="{{ $post->url }}" class="position-relative d-flex">
                             <figure class="img-hover mb-0 w-100" style="height: 250px; overflow: hidden;">
                                 @if($post->cover_image)
                                     <img src="{{ asset('storage/' . $post->cover_image) }}" 
@@ -222,7 +222,7 @@
                         </a>
                         <div class="mt-4">
                             <h3 class="fs-5">
-                                <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="text-inherit">{{ $post->title }}</a>
+                                <a href="{{ $post->url }}" class="text-inherit">{{ $post->title }}</a>
                             </h3>
                             @if($post->short_description)
                                 <p>{{ \Illuminate\Support\Str::limit(strip_tags($post->short_description), 120) }}</p>

@@ -18,6 +18,29 @@
 
 @section('content')
 <!--Pageheader start-->
+@if($destination->image)
+<section class="position-relative" style="height: 280px;">
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+        <img src="{{ asset('storage/' . $destination->image) }}" 
+             alt="Private Jet Charter {{ $destination->name }}"
+             class="w-100 h-100"
+             style="object-fit: cover; object-position: center;">
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.55);"></div>
+    </div>
+    <div class="container position-relative h-100 d-flex align-items-center justify-content-center" style="z-index: 1;">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="text-center">
+                    <h1 class="h2 fw-bold text-white mb-0" style="white-space: nowrap;">Private Jet Charter {{ $destination->name }}</h1>
+                    @if($destination->description)
+                        <p class="mb-0 mt-3 text-white opacity-75">{{ $destination->description }}</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@else
 <section class="bg-light bg-opacity-50 py-lg-10 py-6">
     <div class="container">
         <div class="row justify-content-center">
@@ -32,6 +55,7 @@
         </div>
     </div>
 </section>
+@endif
 <!--Pageheader end-->
 
 <!--Blog posts start-->
@@ -42,7 +66,7 @@
                 <!--Blog post-->
                 <div class="col-lg-4 col-md-6">
                     <article>
-                        <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="position-relative d-flex">
+                        <a href="{{ $post->url }}" class="position-relative d-flex">
                             <figure class="img-hover mb-0">
                                 @if($post->cover_image)
                                     <img src="{{ asset('storage/' . $post->cover_image) }}" 
@@ -62,7 +86,7 @@
                         </a>
                         <div class="mt-4">
                             <h3 class="fs-5">
-                                <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="text-inherit">
+                                <a href="{{ $post->url }}" class="text-inherit">
                                     {{ html_entity_decode($post->title, ENT_QUOTES | ENT_HTML5, 'UTF-8') }}
                                 </a>
                             </h3>

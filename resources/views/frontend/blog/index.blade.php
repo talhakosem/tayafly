@@ -47,7 +47,7 @@
                 <!--Blog category-->
                 <div class="col-lg-4 col-md-6">
                     <article>
-                        <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="position-relative d-flex">
+                        <a href="{{ $post->url }}" class="position-relative d-flex">
                             <figure class="img-hover mb-0">
                                 @if($post->cover_image)
                                     <img src="{{ asset('storage/' . $post->cover_image) }}" 
@@ -67,7 +67,7 @@
                         </a>
                         <div class="mt-4">
                             <h3 class="fs-5">
-                                <a href="{{ url('/' . ($post->categories->first()->slug ?? '') . '/' . $post->slug) }}" class="text-inherit">
+                                <a href="{{ $post->url }}" class="text-inherit">
                                     {{ html_entity_decode($post->title, ENT_QUOTES | ENT_HTML5, 'UTF-8') }}
                                 </a>
                             </h3>

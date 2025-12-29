@@ -15,6 +15,9 @@ Route::get('hakkimizda', [\App\Http\Controllers\Frontend\HomeController::class, 
 
 // Frontend Destination Routes
 Route::get('destination/{slug}', [\App\Http\Controllers\Frontend\DestinationController::class, 'show'])->name('destination.show');
+Route::get('{destination_slug}/{blog_slug}', [\App\Http\Controllers\Frontend\DestinationController::class, 'showPost'])
+    ->name('destination.post')
+    ->where('destination_slug', 'private-jet-charter-.*'); // Sadece private-jet-charter- ile başlayanlar
 
 // Sitemap
 Route::get('sitemap.xml', [\App\Http\Controllers\Frontend\SitemapController::class, 'index'])->name('sitemap');
