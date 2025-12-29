@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::resource('posts', PostController::class);
     Route::resource('categories', \App\Http\Controllers\CategoryController::class);
+    Route::resource('destinations', \App\Http\Controllers\DestinationController::class);
     Route::get('settings', [\App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [\App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');
 });

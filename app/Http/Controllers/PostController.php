@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Destination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -23,7 +24,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name')->get();
-        return view('posts.create', compact('categories'));
+        $destinations = Destination::active()->orderBy('name')->get();
+        return view('posts.create', compact('categories', 'destinations'));
     }
 
     public function store(Request $request)
@@ -34,6 +36,8 @@ class PostController extends Controller
             'short_description' => 'nullable|string',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'destination_ids' => 'nullable|array',
+            'destination_ids.*' => 'exists:destinations,id',
             'tags' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
@@ -42,6 +46,10 @@ class PostController extends Controller
             'category_id.required' => 'Önce kategori seçmelisin.',
             'category_id.exists' => 'Seçilen kategori geçerli değil.',
         ]);
+
+        // Destination ID'leri ayır
+        $destinationIds = $data['destination_ids'] ?? [];
+        unset($data['destination_ids']);
 
         // Görsel yükleme
         if ($request->hasFile('cover_image')) {
@@ -78,6 +86,11 @@ class PostController extends Controller
             $post->categories()->sync([$categoryId]);
         }
 
+        // Destinasyonları attach et
+        if (!empty($destinationIds)) {
+            $post->destinations()->sync($destinationIds);
+        }
+
         return redirect()->route('posts.index')
             ->with('success', 'Blog yazısı başarıyla oluşturuldu.');
     }
@@ -85,8 +98,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::orderBy('name')->get();
-        $post->load('categories');
-        return view('posts.edit', compact('post', 'categories'));
+        $destinations = Destination::active()->orderBy('name')->get();
+        $post->load(['categories', 'destinations']);
+        return view('posts.edit', compact('post', 'categories', 'destinations'));
     }
 
     public function update(Request $request, Post $post)
@@ -98,6 +112,8 @@ class PostController extends Controller
                 'short_description' => 'nullable|string',
                 'content' => 'required|string',
                 'category_id' => 'required|exists:categories,id',
+                'destination_ids' => 'nullable|array',
+                'destination_ids.*' => 'exists:destinations,id',
                 'tags' => 'nullable|string',
                 'meta_title' => 'nullable|string|max:255',
                 'meta_description' => 'nullable|string',
@@ -175,6 +191,10 @@ class PostController extends Controller
         $categoryId = $data['category_id'] ?? null;
         unset($data['category_id']);
 
+        // Destination ID'leri ayır
+        $destinationIds = $data['destination_ids'] ?? [];
+        unset($data['destination_ids']);
+
         // Slug'ı değiştirme (SEO için mevcut slug'ı koru)
         // $data['slug'] = Str::slug($data['title']); // KALDIRILDI
         $data['is_published'] = $request->has('is_published');
@@ -189,6 +209,9 @@ class PostController extends Controller
             } else {
                 $post->categories()->sync([]);
             }
+
+            // Destinasyonları sync et
+            $post->destinations()->sync($destinationIds);
             
             // Cache temizle
             Cache::forget('posts_' . $post->id);

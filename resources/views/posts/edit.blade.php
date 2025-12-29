@@ -140,6 +140,35 @@
                     @enderror
                 </div>
 
+                <!-- Destinasyonlar -->
+                <div>
+                    <label class="form-label">Destinasyonlar</label>
+                    @php
+                        $selectedDestinationIds = old('destination_ids', $post->destinations->pluck('id')->toArray());
+                    @endphp
+                    <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                        @forelse($destinations as $destination)
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="destination_ids[]" 
+                                       value="{{ $destination->id }}" 
+                                       id="destination_{{ $destination->id }}"
+                                       {{ in_array($destination->id, $selectedDestinationIds) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="destination_{{ $destination->id }}">
+                                    {{ $destination->name }}
+                                </label>
+                            </div>
+                        @empty
+                            <p class="text-muted mb-0 small">Henüz destinasyon eklenmemiş.</p>
+                        @endforelse
+                    </div>
+                    <small class="form-text text-muted">Birden fazla destinasyon seçebilirsiniz</small>
+                    @error('destination_ids')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <!-- Tags -->
                 <div>
                     <label class="form-label" for="tags">Etiketler</label>

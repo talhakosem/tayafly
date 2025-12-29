@@ -83,6 +83,16 @@
                                     </div>
                                 </a>
                             </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('destinations.*') ? 'active' : '' }}" href="{{ route('destinations.index') }}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-geo-alt"></i></span>
+                                        <span class="nav-link-text">Destinasyonlar</span>
+                                    </div>
+                                </a>
+                            </li>
+                            
                             <li class="nav-item mt-6 mb-3">
                                 <span class="nav-label">Ayarlar</span>
                             </li>
@@ -142,6 +152,14 @@
                                     <div class="d-flex align-items-center">
                                         <span class="nav-link-icon"><i class="bi bi-list-task"></i></span>
                                         <span class="nav-link-text">Kategoriler</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('destinations.*') ? 'active' : '' }}" href="{{ route('destinations.index') }}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-geo-alt"></i></span>
+                                        <span class="nav-link-text">Destinasyonlar</span>
                                     </div>
                                 </a>
                             </li>

@@ -41,4 +41,11 @@ class Post extends Model
     {
         return $this->belongsToMany(Category::class, 'post_category');
     }
+
+    // Destinations relationship (many-to-many)
+    public function destinations()
+    {
+        return $this->belongsToMany(Destination::class, 'post_destination')
+            ->withTimestamps();
+    }
 }
