@@ -151,10 +151,10 @@
                     </div>
                 </div>
 
-                <!-- Menüde Göster -->
+                <!-- Footer'da Göster -->
                 <div>
                     <div class="form-check form-switch ps-0">
-                        <label class="form-check-label" for="show_in_menu">Menüde Göster</label>
+                        <label class="form-check-label" for="show_in_menu">Footer'da Göster</label>
                         <input class="form-check-input ms-auto" 
                                type="checkbox" 
                                role="switch" 

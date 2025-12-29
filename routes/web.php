@@ -13,6 +13,9 @@ Route::get('blog', [\App\Http\Controllers\Frontend\BlogController::class, 'index
 // Frontend Static Pages
 Route::get('hakkimizda', [\App\Http\Controllers\Frontend\HomeController::class, 'about'])->name('frontend.about');
 
+// Frontend Destination Routes
+Route::get('destination/{slug}', [\App\Http\Controllers\Frontend\DestinationController::class, 'show'])->name('destination.show');
+
 // Sitemap
 Route::get('sitemap.xml', [\App\Http\Controllers\Frontend\SitemapController::class, 'index'])->name('sitemap');
 Route::get('sitemap/compare', [\App\Http\Controllers\Frontend\SitemapController::class, 'compare'])->middleware('auth')->name('sitemap.compare');

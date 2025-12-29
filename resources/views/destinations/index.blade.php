@@ -54,7 +54,7 @@
                                             <span class="badge bg-secondary">Pasif</span>
                                         @endif
                                         @if($destination->show_in_menu)
-                                            <span class="badge bg-info">Menüde</span>
+                                            <span class="badge bg-info">Footer'da</span>
                                         @endif
                                     </td>
                                     <td>
